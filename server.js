@@ -16,13 +16,13 @@ app.use(express.json({ limit: "100mb" }));
 
 const PUTER_API_BASE = "https://api.puter.com/drivers/call";
 const PUTER_AUTH_TOKEN = process.env.PUTER_AUTH_TOKEN;
-const PRIMARY_MODEL = "deepseek-ai/deepseek-v3-0324";
+const PRIMARY_MODEL = "deepseek/deepseek-v3.2";
 
 const FALLBACK_MODELS = [
-  "deepseek-ai/deepseek-v3-0324",
-  "deepseek-ai/deepseek-r1",
-  "deepseek-ai/deepseek-r1-distill-llama-70b",
-  "deepseek-ai/deepseek-r1-distill-qwen-32b"
+  "deepseek/deepseek-v3.1-terminus",
+  "deepseek/deepseek-r1",
+  "deepseek/deepseek-r1-distill-llama-70b",
+  "deepseek/deepseek-r1-distill-qwen-32b"
 ];
 
 const ENABLE_SMART_TRUNCATION = true;
