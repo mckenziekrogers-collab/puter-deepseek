@@ -14,7 +14,7 @@ app.use(cors({
 
 app.use(express.json({ limit: "100mb" }));
 
-const PUTER_API_BASE = "https://api.puter.com/drivers/call";
+const PUTER_API_BASE = "https://api.puter.com/puterai/openai/v1";
 const PUTER_AUTH_TOKEN = process.env.PUTER_AUTH_TOKEN;
 const PRIMARY_MODEL = "deepseek/deepseek-v3.2";
 
@@ -188,18 +188,12 @@ async function makePuterRequest(messages, temperature, max_tokens, modelToUse) {
   requestHeaders["Content-Type"] = "application/json";
 
   const response = await axios.post(
-    PUTER_API_BASE,
+    PUTER_API_BASE + "/chat/completions",
     {
-      interface: "puter-chat-completion",
-      driver: "openai-completion",
-      test_mode: false,
-      method: "complete",
-      args: {
-        model: modelToUse,
-        messages: messages,
-        temperature: temperature,
-        max_tokens: max_tokens
-      }
+      model: modelToUse,
+      messages: messages,
+      temperature: temperature,
+      max_tokens: max_tokens
     },
     {
       headers: requestHeaders,
@@ -224,7 +218,7 @@ async function makeRequestWithFallback(messages, temperature, max_tokens, attemp
   try {
     const response = await makePuterRequest(messages, temperature, max_tokens, modelToUse);
 
-    if (response.status === 200 && response.data && response.data.result) {
+    if (response.status === 200 && response.data) {
       failedAttempts = 0;
       if (modelToUse !== currentModel) {
         console.log("Switched to", modelToUse);
@@ -343,7 +337,7 @@ app.post("/v1/chat/completions", async function(req, res) {
 
     const response = await makeRequestWithFallback(processedMessages, temperature, max_tokens, 0);
 
-    const result = response.data.result;
+    const result = response.data;
     const reply = (
       result &&
       result.choices &&
