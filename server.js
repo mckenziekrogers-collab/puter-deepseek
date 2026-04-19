@@ -297,10 +297,10 @@ app.get("/v1/models", function(req, res) {
   res.json({
     object: "list",
     data: [
-      { id: "gpt-4",         object: "model", created: Date.now(), owned_by: "proxy" },
-      { id: "gpt-4o",        object: "model", created: Date.now(), owned_by: "proxy" },
-      { id: "gpt-3.5-turbo", object: "model", created: Date.now(), owned_by: "proxy" },
-      { id: PRIMARY_MODEL,   object: "model", created: Date.now(), owned_by: "proxy" }
+      { id: "gpt-4",         object: "model", created: Math.floor(Date.now() / 1000), owned_by: "proxy" },
+      { id: "gpt-4o",        object: "model", created: Math.floor(Date.now() / 1000), owned_by: "proxy" },
+      { id: "gpt-3.5-turbo", object: "model", created: Math.floor(Date.now() / 1000), owned_by: "proxy" },
+      { id: PRIMARY_MODEL,   object: "model", created: Math.floor(Date.now() / 1000), owned_by: "proxy" }
     ]
   });
 });
