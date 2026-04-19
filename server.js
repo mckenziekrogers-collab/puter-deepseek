@@ -351,17 +351,21 @@ app.post("/v1/chat/completions", async function(req, res) {
       object: "chat.completion",
       created: Math.floor(Date.now() / 1000),
       model: body.model || "gpt-3.5-turbo",
+      system_fingerprint: null,
       choices: [
         {
           index: 0,
           message: { role: "assistant", content: reply || " " },
+          logprobs: null,
           finish_reason: (result && result.choices && result.choices[0] && result.choices[0].finish_reason) || "stop"
         }
       ],
       usage: (result && result.usage) || {
         prompt_tokens: 10,
         completion_tokens: 50,
-        total_tokens: 60
+        total_tokens: 60,
+        prompt_tokens_details: null,
+        completion_tokens_details: null
       }
     };
 
