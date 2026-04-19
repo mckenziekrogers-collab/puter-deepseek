@@ -197,7 +197,7 @@ async function makePuterRequest(messages, temperature, max_tokens, modelToUse) {
     },
     {
       headers: requestHeaders,
-      timeout: 600000,
+      timeout: 120000,
       validateStatus: function(status) { return status < 500; }
     }
   );
@@ -309,6 +309,11 @@ app.post("/v1/chat/completions", async function(req, res) {
   recordHit(req);
   console.log("POST /v1/chat/completions");
 
+  // Send headers immediately so Janitor doesn't timeout waiting
+  res.setHeader("Content-Type", "application/json");
+  res.setHeader("Cache-Control", "no-cache");
+  res.setHeader("X-Accel-Buffering", "no");
+
   try {
     if (!PUTER_AUTH_TOKEN) {
       return res.status(500).json({ error: { message: "Missing PUTER_AUTH_TOKEN" } });
@@ -350,7 +355,7 @@ app.post("/v1/chat/completions", async function(req, res) {
       id: (result && result.id) || ("chatcmpl-" + Date.now()),
       object: "chat.completion",
       created: Math.floor(Date.now() / 1000),
-      model: body.model || "gpt-3.5-turbo",
+      model: body.model || PRIMARY_MODEL,
       system_fingerprint: null,
       choices: [
         {
