@@ -370,6 +370,7 @@ app.post("/v1/chat/completions", async function(req, res) {
     };
 
     res.setHeader("Content-Type", "application/json");
+    console.log("Sending response:", JSON.stringify(openaiResponse).slice(0, 300));
     res.json(openaiResponse);
     console.log("Response sent -", reply.length, "chars, model:", currentModel);
 
